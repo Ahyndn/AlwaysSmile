@@ -83,6 +83,8 @@ from .visualizations import (
     prepare_pie_chart,
 )
 
+from .planogram.floor_illustrations import build_illustration
+
 # ==========================================================
 # CONSTANTS
 # ==========================================================
@@ -1483,6 +1485,9 @@ def merchandise_floor_data(request, floor_id):
         for room in floor.rooms.all()
     ]
 
+    # After `floor` and its rooms have been loaded:
+    architectural = build_illustration(floor, rooms)
+
     fixtures = [serialize_fixture_geometry(fixture) for fixture in floor.fixtures.all()]
 
     return JsonResponse(
@@ -1496,6 +1501,7 @@ def merchandise_floor_data(request, floor_id):
             },
             "rooms": rooms,
             "fixtures": fixtures,
+            "architectural": architectural,
         }
     )
 

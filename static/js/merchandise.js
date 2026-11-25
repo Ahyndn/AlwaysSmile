@@ -147,20 +147,21 @@ async function loadFloor() {
             throw new Error("Floor information is missing.");
         }
 
-        if (
-            !Number(data.floor.width) ||
-            !Number(data.floor.height)
-        ) {
+        if (!Number(data.floor.width) || !Number(data.floor.height)) {
             throw new Error("Invalid floor dimensions.");
         }
 
-        currentFloorData = data.floor;
+        // Keep the entire response, including architectural features.
+        currentFloorData = data;
         currentRooms = Array.isArray(data.rooms) ? data.rooms : [];
         currentFixtures = Array.isArray(data.fixtures)
             ? data.fixtures
             : [];
 
-        renderFloor(currentFloorData);
+        renderFloor(
+            data.floor,
+            data.architectural?.features || []
+        );
 
     } catch (error) {
         setLoading(elements.floorCanvas, error.message);
@@ -168,11 +169,36 @@ async function loadFloor() {
     }
 }
 
+function renderArchitecturalFeatures(features, floor) {
+    const width = Number(floor.width);
+    const height = Number(floor.height);
+
+    if (!width || !height || !Array.isArray(features)) return "";
+
+    return features.map(feature => {
+        const left = (Number(feature.x) / width) * 100;
+        const top = (Number(feature.y) / height) * 100;
+        const featureWidth = (Number(feature.width) / width) * 100;
+        const featureHeight = (Number(feature.height) / height) * 100;
+
+        if (![left, top, featureWidth, featureHeight].every(Number.isFinite)) {
+            return "";
+        }
+
+        return `
+            <div class="floor-architecture floor-architecture--${escapeHTML(feature.kind)}"
+                 aria-hidden="true"
+                 style="left:${left}%;top:${top}%;width:${featureWidth}%;height:${featureHeight}%">
+            </div>
+        `;
+    }).join("");
+}
+
 /* ========================================================
    FLOOR RENDERING
    ======================================================== */
 
-function renderFloor(floor) {
+function renderFloor(floor, architecturalFeatures = []) {
     const canvas = elements.floorCanvas;
 
     const width = Number(floor.width);
@@ -182,8 +208,6 @@ function renderFloor(floor) {
         setLoading(canvas, "Invalid floor dimensions.");
         return;
     }
-
-    currentFloorData = floor;
 
     canvas.style.position = "relative";
     canvas.style.width = "100%";
@@ -195,27 +219,21 @@ function renderFloor(floor) {
 
     canvas.innerHTML = "";
 
+    canvas.insertAdjacentHTML(
+        "beforeend",
+        renderArchitecturalFeatures(architecturalFeatures, floor)
+    );
+
     currentRooms.forEach(room => {
         const element = document.createElement("div");
 
-        element.className =
-            "absolute flex items-center justify-center " +
-            "border border-gray-400 text-xs font-medium text-gray-700";
+        element.className = "floor-room";
 
-        element.style.left =
-            `${Number(room.x) / width * 100}%`;
-
-        element.style.top =
-            `${Number(room.y) / height * 100}%`;
-
-        element.style.width =
-            `${Number(room.width) / width * 100}%`;
-
-        element.style.height =
-            `${Number(room.height) / height * 100}%`;
-
+        element.style.left = `${Number(room.x) / width * 100}%`;
+        element.style.top = `${Number(room.y) / height * 100}%`;
+        element.style.width = `${Number(room.width) / width * 100}%`;
+        element.style.height = `${Number(room.height) / height * 100}%`;
         element.style.background = room.color || "#DBEAFE";
-
         element.textContent = room.name;
 
         canvas.appendChild(element);
@@ -226,16 +244,20 @@ function renderFloor(floor) {
     });
 }
 
+
 function renderFixture(fixture, floorWidth, floorHeight) {
     const element = document.createElement("button");
 
     element.type = "button";
 
-    element.className =
-        "absolute flex items-center justify-center " +
-        "overflow-hidden rounded border-2 border-blue-800 " +
-        "bg-blue-600 p-1 text-center text-xs font-semibold text-white " +
-        "hover:bg-blue-700";
+    element.className = "floor-fixture";
+    if (String(selectedFixture?.id) === String(fixture.id)) {
+        element.classList.add("selected");
+    }
+        // "absolute flex items-center justify-center " +
+        // "overflow-hidden rounded border-2 border-blue-800 " +
+        // "bg-blue-600 p-1 text-center text-xs font-semibold text-white " +
+        // "hover:bg-blue-700";
 
     element.style.left =
         `${Number(fixture.x) / floorWidth * 100}%`;
@@ -270,7 +292,10 @@ async function selectFixture(fixture) {
     selectedFixture = fixture;
 
     if (currentFloorData) {
-        renderFloor(currentFloorData);
+        renderFloor(
+            currentFloorData.floor,
+            currentFloorData.architectural?.features || []
+        );
     }
 
     // fixture details and planogram loading code.

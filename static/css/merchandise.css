@@ -49,6 +49,35 @@
     outline-offset: 2px;
 }
 
+.floor-architecture {
+    position: absolute;
+    pointer-events: none;
+}
+
+.floor-architecture--wall {
+    z-index: 1;
+    border: 2px solid #475569;
+    background: rgba(226, 232, 240, 0.18);
+}
+
+.floor-architecture--opening {
+    z-index: 2;
+    background: #fff;
+    border-top: 2px solid #fff;
+}
+
+.floor-architecture--circulation {
+    z-index: 0;
+    border: 1px dashed #94a3b8;
+    background: rgba(241, 245, 249, 0.45);
+}
+
+.floor-architecture--window {
+    z-index: 2;
+    border: 2px solid #0ea5e9;
+    background: #bae6fd;
+}
+
 .product-card {
     display: flex;
     flex-direction: column;

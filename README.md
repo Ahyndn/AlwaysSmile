@@ -2,7 +2,7 @@
 
 **Project Status: Under Active Development**
 
-AlwaysSmile is a Django-based business operations SAAS Demo incorporating inventory analytics, logistics monitoring, architectural floor planning, and merchandise planogram functionality. It can also be considered as a template for future usage includng: scaling for AI backed support, research (by academia, public sector, research institutions), and commerical usage. Everything used to build is open sourced and will be open-source license for usage.
+AlwaysSmile is a Django-based business operations SAAS Demo incorporating inventory analytics, logistics monitoring, floor plan, merchandise planogram functionality amd price setting functionality. It can also be considered as a template for future usage. Heavily mentioned details regarding: scaling for research, AI backed support, academia and commerical usage demonstrate the potential of this application [[1](https://github.com/ishandutta2007/Awesome-Planogram-Management)]. Everything used to build is open sourced and will be open-source license for usage.
 
 This repository is currently undergoing active development. Some features are operational, while others are being implemented, optimized, or refined.
 
@@ -32,17 +32,17 @@ Currently done: Logistics Dashboard, Customer Review Dashboard, Inventory Dashbo
 Trying to finish (hardest part of this entire development, total of 2 things left to finish):
 1. Merchandise Planogram Integration
 This feature idea:
-A. Add/Delete a fixture to the location (multi-location setting), information still saved for users
-B. Continue browsing throughout, final save when ready
-C. Add/Remove product onto the fixture to the location (multi-location setting), information still saved for users
-D. Continue browsing throughout, final save when ready
-E. 2-Way Compatibility with the price planner, can set the price while placing to location or taking it off the location. Also aware of an omni-channel business.
+    1. Add/Delete a fixture to the location (multi-location setting), information still saved for users
+    2. Continue browsing throughout, final save when ready
+    3. Add/Remove product onto the fixture to the location (multi-location setting), information still saved for users
+    4. Continue browsing throughout, final save when ready
+    5. 2-Way Compatibility with the price planner, can set the price while placing to location or taking it off the location. Also aware of an omni-channel business.
 
 2. Price Planning Tool, a catalogue combined with ability to set prices for an omni-channel business
-A. 2-Way Compatibility with the planogram, can set the price while placing to location or taking it off the location. Also aware of an omni-channel business.
-B. Save/Delete a product price, with all information still saved for users
-C. Continue browsing throughout, final save when ready
-D. The information should be present at the planogram side.
+    1. 2-Way Compatibility with the planogram, can set the price while placing to location or taking it off the location. Also aware of an omni-channel business.
+    2. Save/Delete a product price, with all information still saved for users
+    3. Continue browsing throughout, final save when ready
+    4. The information should be present at the planogram side.
 
 Will make this an open source tool license tool (lots of is MIT licenses, Python licenses (PSF license, Zero Clause BSD license) & public domain (SQlite) for ANY PURPOSE (commercial included use)). The tool does not have a overarching license, it is planned to respect all licenses of used technologies.
 
@@ -61,6 +61,8 @@ Installation instructions, environment configuration, database setup, and applic
 The references and acknowledgements section is currently under development.
 
 Relevant libraries, frameworks, external APIs, datasets, documentation, and other resources will be properly acknowledged in the completed documentation.
+
+1. Awesome-Planogram-Management, Ishan Dutta (MIT License & public domain / CC0), https://github.com/ishandutta2007/Awesome-Planogram-Management
 
 ## Project Documentation
 

@@ -110,17 +110,6 @@
       <span class="truncate">Logistics</span>
     </a>
 
-    <!-- PRICE PLANNER -->
-    <a
-      href="{% url 'dashboard:product_catalog' %}"
-      {% if request.resolver_match.url_name == 'product_catalog' %}
-        aria-current="page"
-      {% endif %}
-      class="flex min-w-0 items-center rounded-lg px-3 py-3 text-sm font-medium transition {% if request.resolver_match.url_name == 'product_catalog' %}bg-blue-50 text-blue-700{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}"
-    >
-      <span class="truncate">Price Planner</span>
-    </a>
-
     <!-- MERCHANDISE -->
     <a
       href="{% url 'dashboard:merchandise' %}"
