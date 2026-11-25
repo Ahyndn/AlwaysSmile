@@ -1,0 +1,12 @@
+
+Django
+django-tailwind
+shadcn-django
+numpy
+pandas
+matplotlib
+plotly
+requests
+Pillow
+renovation
+PyYAML

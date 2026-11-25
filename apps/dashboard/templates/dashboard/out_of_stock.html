@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="min-w-0 space-y-6 p-6">
+    <!-- PAGE HEADER -->
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Out of Stock Orders</h1>
+        <p class="mt-1 text-sm text-gray-500">Review unavailable products and prepare replenishment orders.</p>
+      </div>
+      <span class="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+        {{ inventory|length }} Out of Stock Products
+      </span>
+    </div>
+    <!-- DJANGO MESSAGES -->
+    {% if messages %}
+      <div class="space-y-2">
+        {% for message in messages %}
+          <div class="rounded-lg border px-4 py-3 text-sm {% if message.tags == 'success' %}border-green-200 bg-green-50 text-green-700{% elif message.tags == 'error' %}border-red-200 bg-red-50 text-red-700{% else %}border-blue-200 bg-blue-50 text-blue-700{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- API ERROR -->
+    {% if api_error %}
+      <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <strong>Product API Error</strong>
+        <p class="mt-1">{{ api_error }}</p>
+        <p class="mt-2">Previously saved Browser Memory orders remain available.</p>
+      </div>
+    {% endif %}
+    <!-- ORDER SUMMARY -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Total Order Quantity</p>
+        <p class="mt-2 text-3xl font-bold text-gray-900">{{ total_order_quantity }}</p>
+        <p class="mt-1 text-xs text-gray-500">Total units saved in Browser Memory</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Total Order Value</p>
+        <p class="mt-2 text-3xl font-bold text-gray-900">${{ total_order_value|floatformat:2 }}</p>
+        <p class="mt-1 text-xs text-gray-500">Estimated value of saved orders</p>
+      </div>
+    </div>
+    <!-- OUT OF STOCK PRODUCTS -->
+    <section class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-200 px-5 py-4">
+        <h2 class="text-lg font-semibold text-gray-900">Products Available for Ordering</h2>
+        <p class="mt-1 text-sm text-gray-500">Select a quantity and add products to Browser Memory.</p>
+      </div>
+      <!-- PRODUCTS TABLE -->
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[1100px] text-left text-xs">
+          <thead class="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500">
+            <tr>
+              <th class="px-3 py-3">Product</th>
+              <th class="px-3 py-3">Category</th>
+              <th class="px-3 py-3">Barcode</th>
+              <th class="px-3 py-3">SKU</th>
+              <th class="px-3 py-3 text-center">Current Stock</th>
+              <th class="px-3 py-3 text-center">MOQ</th>
+              <th class="px-3 py-3 text-right">Unit Price</th>
+              <th class="px-3 py-3 text-center">Order Quantity</th>
+              <th class="px-3 py-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for item in inventory %}
+              <tr class="transition hover:bg-red-50/40">
+                <td class="px-3 py-2.5">
+                  <div class="font-medium text-sm text-gray-900">{{ item.title }}</div>
+                </td>
+                <td class="px-3 py-2.5 text-gray-600">{{ item.category|default:"—" }}</td>
+                <td class="px-3 py-2.5 text-gray-600 whitespace-nowrap">{{ item.barcode|default:"—" }}</td>
+                <td class="px-3 py-2.5 text-gray-600 whitespace-nowrap">{{ item.sku|default:"—" }}</td>
+                <td class="px-3 py-2.5 text-center">
+                  <span class="rounded-full bg-red-50 px-2 py-1 text-[11px] font-semibold text-red-700">
+                    {{ item.stock }}
+                  </span>
+                </td>
+                <td class="px-3 py-2.5 text-center text-gray-600">{{ item.minimum_order_quantity|default:"—" }}</td>
+                <td class="px-3 py-2.5 text-right font-medium text-gray-900 whitespace-nowrap">
+                  ${{ item.price|floatformat:2 }}
+                </td>
+                <td class="px-3 py-2.5 text-center">
+                  <form method="post" class="flex items-center justify-center gap-1.5">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_order">
+                    <input type="hidden" name="product_id" value="{{ item.id }}">
+                    <input type="number"
+                           name="quantity"
+                           min="1"
+                           step="1"
+                           value="{{ item.quantity_to_order }}"
+                           required
+                           class="w-16 rounded-md border border-gray-300 px-2 py-1.5 text-center text-xs focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    <button type="submit"
+                            class="whitespace-nowrap rounded-md bg-blue-600 px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-blue-700">
+                      Place Order
+                    </button>
+                  </form>
+                </td>
+                <td class="px-3 py-2.5 text-center">
+                  <span class="whitespace-nowrap text-[11px] text-red-600">Replenishment</span>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="9" class="px-5 py-10 text-center">
+                  <p class="text-sm font-semibold text-gray-700">No Out of Stock Products</p>
+                  <p class="mt-1 text-xs text-gray-500">
+                    {% if api_error %}
+                      Product availability cannot currently be retrieved.
+                    {% else %}
+                      All products currently have available stock.
+                    {% endif %}
+                  </p>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- BROWSER MEMORY: SAVED ORDERS -->
+    <section class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 px-5 py-4">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Browser Memory – Saved Orders</h2>
+          <p class="mt-1 text-sm text-gray-500">Review, manage or remove your pending replenishment orders.</p>
+        </div>
+        {% if saved_orders %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="clear_memory">
+            <button type="submit"
+                    onclick="return confirm('Are you sure you want to clear all saved orders?');"
+                    class="rounded-lg border border-red-200 bg-white px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50">
+              Clear Browser Memory
+            </button>
+          </form>
+        {% endif %}
+      </div>
+      <!-- SAVED ORDERS TABLE -->
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[750px] text-left text-xs">
+          <thead class="bg-gray-50 text-[11px] uppercase tracking-wide text-gray-500">
+            <tr>
+              <th class="px-3 py-3">Product</th>
+              <th class="px-3 py-3">Product ID</th>
+              <th class="px-3 py-3 text-right">Unit Price</th>
+              <th class="px-3 py-3 text-center">Order Quantity</th>
+              <th class="px-3 py-3 text-right">Total Value</th>
+              <th class="px-3 py-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for item in saved_orders %}
+              <tr class="transition hover:bg-gray-50">
+                <td class="px-3 py-2.5 font-medium text-sm text-gray-900">{{ item.title }}</td>
+                <td class="px-3 py-2.5 text-gray-600">{{ item.product_id }}</td>
+                <td class="px-3 py-2.5 text-right text-gray-600 whitespace-nowrap">${{ item.price|floatformat:2 }}</td>
+                <td class="px-3 py-2.5 text-center font-medium text-gray-900">{{ item.quantity }}</td>
+                <td class="px-3 py-2.5 text-right font-semibold text-gray-900 whitespace-nowrap">
+                  ${{ item.line_total|floatformat:2 }}
+                </td>
+                <td class="px-3 py-2.5 text-center">
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete_order">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <button type="submit"
+                            onclick="return confirm('Delete this saved order?');"
+                            class="rounded-md border border-red-200 px-2.5 py-1 text-[11px] font-medium text-red-600 transition hover:bg-red-50">
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="px-5 py-10 text-center">
+                  <p class="text-sm font-semibold text-gray-700">No Saved Orders</p>
+                  <p class="mt-1 text-xs text-gray-500">
+                    Products added to your replenishment orders will appear here.
+                  </p>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <!-- ORDER TOTALS -->
+          {% if saved_orders %}
+            <tfoot class="border-t-2 border-gray-200 bg-gray-50">
+              <tr>
+                <td colspan="3" class="px-3 py-3 font-bold text-gray-900">TOTAL</td>
+                <td class="px-3 py-3 text-center font-bold text-gray-900">{{ total_order_quantity }}</td>
+                <td class="px-3 py-3 text-right font-bold text-gray-900 whitespace-nowrap">
+                  ${{ total_order_value|floatformat:2 }}
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
+          {% endif %}
+        </table>
+      </div>
+    </section>
+    <!-- CALCULATION DEFINITIONS -->
+    <section class="rounded-xl border border-gray-200 bg-gray-50 p-5">
+      <h2 class="text-sm font-semibold text-gray-900">Calculation Definitions</h2>
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Suggested Order Quantity</p>
+          <p class="mt-2 text-sm text-gray-700">max(1, MOQ − Current Stock)</p>
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Order Value</p>
+          <p class="mt-2 text-sm text-gray-700">Order Quantity × Unit Price</p>
+        </div>
+      </div>
+      <p class="mt-4 text-xs text-gray-500">
+        Out-of-stock products have zero available inventory.
+        All totals represent estimated pending replenishment order values.
+        Saving an order in Browser Memory does not submit a purchase order to a supplier.
+      </p>
+    </section>
+  </div>
+{% endblock %}

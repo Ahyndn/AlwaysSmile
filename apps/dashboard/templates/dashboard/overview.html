@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="w-full">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-gray-900">Overview</h2>
+      <p class="text-sm text-gray-500 mt-1">Inventory and customer review analytics</p>
+    </div>
+    {% if api_error %}
+      <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+        <p class="font-semibold">API connection error</p>
+        <p class="text-sm mt-1">{{ api_error }}</p>
+      </div>
+    {% endif %}
+    <!-- Summary cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-8">
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500">Total Sales</p>
+        <p class="text-2xl font-bold mt-2">${{ total_sales|floatformat:2 }}</p>
+        <p class="text-xs text-gray-400 mt-2">Calculated from product quantities and prices</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500">Total Reviews</p>
+        <p class="text-2xl font-bold mt-2">{{ review_summary.total_reviews }}</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500">Positive</p>
+        <p class="text-2xl font-bold text-green-600 mt-2">{{ review_summary.positive_reviews }}</p>
+        <p class="text-xs text-gray-400 mt-2">4–5 Rating</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500">Neutral</p>
+        <p class="text-2xl font-bold text-amber-600 mt-2">{{ review_summary.neutral_reviews }}</p>
+        <p class="text-xs text-gray-400 mt-2">3 Rating</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500">Negative</p>
+        <p class="text-2xl font-bold text-red-600 mt-2">{{ review_summary.negative_reviews }}</p>
+        <p class="text-xs text-gray-400 mt-2">1–2 Rating</p>
+      </div>
+    </section>
+    <!-- Charts -->
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+      <!-- Horizontal Matplotlib bar chart -->
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 class="font-semibold text-gray-900 mb-6">Total Sales Per Category</h3>
+        {% if bar_chart_image %}
+          <img src="{{ bar_chart_image }}"
+               alt="Horizontal bar chart showing total sales per API category"
+               class="w-full h-auto" />
+        {% else %}
+          <p class="text-sm text-gray-400 text-center py-10">Chart unavailable</p>
+        {% endif %}
+      </div>
+      <!-- Matplotlib pie chart -->
+      <div class="bg-white rounded-xl border border-gray-200 p-6">
+        <h3 class="font-semibold text-gray-900 mb-6">Sales Distribution by Category</h3>
+        <div class="flex flex-col sm:flex-row items-center gap-8">
+          <!-- Pie chart image -->
+          <div class="w-48 shrink-0">
+            {% if pie_chart_image %}
+              <img src="{{ pie_chart_image }}"
+                   alt="Pie chart showing sales distribution by business category"
+                   class="w-full h-auto" />
+            {% endif %}
+          </div>
+          <!-- Pie chart legend -->
+          <div class="flex-1 w-full space-y-4">
+            {% for item in pie_chart %}
+              <div class="text-sm">
+                <div class="flex justify-between gap-3">
+                  <span class="font-medium text-gray-700">{{ item.category }}</span>
+                  <span class="font-medium">{{ item.percentage|floatformat:1 }}%</span>
+                </div>
+                {% for detail in category_details %}
+                  {% if detail.category == item.category %}
+                    <p class="text-xs text-gray-400 mt-1">{{ detail.api_categories }}</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% empty %}
+              <p class="text-sm text-gray-500">No category sales data available.</p>
+            {% endfor %}
+          </div>
+        </div>
+        <!-- Pie chart calculation explanation -->
+        <div class="mt-8 border-t border-gray-100 pt-6 text-center">
+          <p class="text-sm font-semibold text-gray-600 mb-3">Sales Calculation</p>
+          <p class="text-base sm:text-lg font-medium text-gray-800 leading-relaxed">
+            Total Sales =
+            <span class="font-mono">Σ [max(0, Minimum Order Quantity − Stock) × Price]</span>
+          </p>
+          <p class="text-sm text-gray-500 leading-relaxed mt-3">
+            Category Percentage = (Category Sales ÷ Total Sales) × 100
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- Inventory -->
+    <section class="bg-white rounded-xl border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="font-semibold text-gray-900">Inventory</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-gray-50 text-gray-600">
+            <tr>
+              <th class="px-4 py-4">Item</th>
+              <th class="px-4 py-4">Category</th>
+              <th class="px-4 py-4">SKU</th>
+              <th class="px-4 py-4">Barcode</th>
+              <th class="px-4 py-4">Amount</th>
+              <th class="px-4 py-4">Stock</th>
+              <th class="px-4 py-4">Minimum Order</th>
+              <th class="px-4 py-4">Rating</th>
+              <th class="px-4 py-4">Availability</th>
+              <th class="px-4 py-4">Qty to Order</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for item in inventory %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-4 font-medium text-gray-900">{{ item.title }}</td>
+                <td class="px-4 py-4">{{ item.category }}</td>
+                <td class="px-4 py-4">{{ item.sku }}</td>
+                <td class="px-4 py-4">{{ item.barcode }}</td>
+                <td class="px-4 py-4">${{ item.price|floatformat:2 }}</td>
+                <td class="px-4 py-4">{{ item.stock }}</td>
+                <td class="px-4 py-4">{{ item.minimum_order_quantity }}</td>
+                <td class="px-4 py-4">
+                  {% if item.rating is not None %} {{ item.rating|floatformat:1 }}
+            {% else %} N/A {% endif %}
+              </td>
+              <td class="px-4 py-4">{{ item.availability_status }}</td>
+              <td class="px-4 py-4 font-medium text-gray-500">{{ item.quantity_to_order }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="10" class="px-6 py-10 text-center text-gray-500">No products found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% if unknown_categories %}
+      <p class="mt-4 text-xs text-amber-700">Unrecognized API categories: {{ unknown_categories|join:", " }}</p>
+    {% endif %}
+  </div>
+{% endblock %}

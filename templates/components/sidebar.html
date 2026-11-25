@@ -1,0 +1,170 @@
+﻿<aside
+  class="flex min-h-screen w-64 min-w-0 shrink-0 flex-col overflow-hidden border-r border-gray-200 bg-white"
+>
+  <!-- APPLICATION BRANDING -->
+  <div class="shrink-0 border-b border-gray-200 px-5 py-6 text-center">
+    <h1 class="text-xl font-bold tracking-tight text-gray-900">AlwaysSmile</h1>
+    <p class="mt-1 text-xs text-gray-500">Retail, E-commerce, and Mobile</p>
+  </div>
+
+  <!-- MAIN NAVIGATION -->
+  <nav
+    class="min-w-0 flex-1 space-y-2 overflow-y-auto px-3 py-6"
+    aria-label="Main navigation"
+  >
+    <!-- OVERVIEW -->
+    <a
+      href="{% url 'dashboard:overview' %}"
+      {% if request.resolver_match.url_name == 'overview' %}
+        aria-current="page"
+      {% endif %}
+      class="flex min-w-0 items-center rounded-lg px-3 py-3 text-sm font-medium transition {% if request.resolver_match.url_name == 'overview' %}bg-blue-50 text-blue-700{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}"
+    >
+      <span class="truncate">Overview</span>
+    </a>
+
+    <!-- CUSTOMER REVIEW -->
+    <c-sidebar-accordion title="Customer Review" group="dashboard-navigation">
+      <a
+        href="{% url 'dashboard:customer_review' %}"
+        {% if request.resolver_match.url_name == 'customer_review' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'customer_review' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        Review Summary
+      </a>
+    </c-sidebar-accordion>
+
+    <!-- INVENTORY -->
+    <c-sidebar-accordion title="Inventory" group="dashboard-navigation">
+      <a
+        href="{% url 'dashboard:inventory' %}"
+        {% if request.resolver_match.url_name == 'inventory' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'inventory' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        Inventory Summary
+      </a>
+
+      <a
+        href="{% url 'dashboard:saved_orders' %}"
+        {% if request.resolver_match.url_name == 'saved_orders' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'saved_orders' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        Saved Orders
+      </a>
+
+      <a
+        href="{% url 'dashboard:abc_analysis' %}"
+        {% if request.resolver_match.url_name == 'abc_analysis' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'abc_analysis' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        ABC Analysis
+      </a>
+
+      <a
+        href="{% url 'dashboard:out_of_stock' %}"
+        {% if request.resolver_match.url_name == 'out_of_stock' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'out_of_stock' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        Out of Stock
+      </a>
+
+      <a
+        href="{% url 'dashboard:low_stock' %}"
+        {% if request.resolver_match.url_name == 'low_stock' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'low_stock' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        Low Stock
+      </a>
+
+      <a
+        href="{% url 'dashboard:in_stock' %}"
+        {% if request.resolver_match.url_name == 'in_stock' %}
+          aria-current="page"
+        {% endif %}
+        class="block rounded-md px-3 py-2 text-sm transition {% if request.resolver_match.url_name == 'in_stock' %}bg-blue-50 font-medium text-blue-700{% else %}text-gray-600 hover:bg-gray-50 hover:text-blue-700{% endif %}"
+      >
+        In Stock
+      </a>
+    </c-sidebar-accordion>
+
+    <!-- LOGISTICS -->
+    <a
+      href="{% url 'dashboard:logistics' %}"
+      {% if request.resolver_match.url_name == 'logistics' %}
+        aria-current="page"
+      {% endif %}
+      class="flex min-w-0 items-center rounded-lg px-3 py-3 text-sm font-medium transition {% if request.resolver_match.url_name == 'logistics' %}bg-blue-50 text-blue-700{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}"
+    >
+      <span class="truncate">Logistics</span>
+    </a>
+
+    <!-- PRICE PLANNER -->
+    <a
+      href="{% url 'dashboard:product_catalog' %}"
+      {% if request.resolver_match.url_name == 'product_catalog' %}
+        aria-current="page"
+      {% endif %}
+      class="flex min-w-0 items-center rounded-lg px-3 py-3 text-sm font-medium transition {% if request.resolver_match.url_name == 'product_catalog' %}bg-blue-50 text-blue-700{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}"
+    >
+      <span class="truncate">Price Planner</span>
+    </a>
+
+    <!-- MERCHANDISE -->
+    <a
+      href="{% url 'dashboard:merchandise' %}"
+      {% if request.resolver_match.url_name == 'merchandise' %}
+        aria-current="page"
+      {% endif %}
+      class="flex min-w-0 items-center rounded-lg px-3 py-3 text-sm font-medium transition {% if request.resolver_match.url_name == 'merchandise' %}bg-blue-50 text-blue-700{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}"
+    >
+      <span class="truncate">Merchandise</span>
+    </a>
+  </nav>
+
+  <!-- USER PROFILE -->
+  <div class="shrink-0 border-t border-gray-200 p-4">
+    <div class="flex min-w-0 items-center gap-3">
+      {% if user_photo_url %}
+        <img
+          src="{{ user_photo_url }}"
+          alt="User profile photo"
+          class="h-10 w-10 shrink-0 rounded-full object-cover"
+        />
+      {% else %}
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-500"
+        >
+          <svg
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21a8 8 0 0116 0" />
+          </svg>
+        </div>
+      {% endif %}
+
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-semibold text-gray-900">username</p>
+        <p class="truncate text-xs text-gray-500">username</p>
+      </div>
+    </div>
+  </div>
+</aside>

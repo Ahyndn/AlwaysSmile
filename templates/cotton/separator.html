@@ -1,0 +1,8 @@
+﻿<c-vars orientation="horizontal" class="" />
+
+<div
+    role="separator"
+    aria-orientation="{{ orientation }}"
+    class="{% if orientation == 'vertical' %}h-full w-px{% else %}h-px w-full{% endif %} shrink-0 bg-border {{ class }}"
+    {{ attrs }}
+></div>

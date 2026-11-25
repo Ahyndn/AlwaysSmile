@@ -1,0 +1,23 @@
+<c-vars
+    src=""
+    alt=""
+    fallback="?"
+    class=""
+/>
+
+<div
+    class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted items-center justify-center {{ class }}"
+    {{ attrs }}
+>
+    {% if src %}
+        <img
+            src="{{ src }}"
+            alt="{{ alt }}"
+            class="aspect-square h-full w-full object-cover"
+        />
+    {% else %}
+        <span class="text-sm font-medium text-muted-foreground">
+            {{ fallback }}
+        </span>
+    {% endif %}
+</div>

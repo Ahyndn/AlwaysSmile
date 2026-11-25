@@ -1,0 +1,99 @@
+
+.legend-dot {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.floor-room {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 1px solid #94a3b8;
+    padding: 2px;
+    overflow: hidden;
+    text-align: center;
+    color: #374151;
+    font-size: clamp(7px, 0.8vw, 11px);
+    line-height: 1.3;
+}
+
+.floor-fixture {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #1d4ed8;
+    border-radius: 5px;
+    background: #2563eb;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    padding: 2px;
+    overflow: hidden;
+    transition: background 0.15s, outline 0.15s;
+}
+
+.floor-fixture:hover {
+    background: #1d4ed8;
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+.floor-fixture.selected {
+    outline: 3px solid #f59e0b;
+    outline-offset: 2px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+    background: white;
+}
+
+.product-card img {
+    width: 100%;
+    height: 125px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.planogram-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.planogram-table th,
+.planogram-table td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px;
+    text-align: left;
+}
+
+.planogram-table th {
+    background: #f9fafb;
+    font-weight: 600;
+}
+
+.planogram-thumbnail {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+}
+
+@media print {
+    aside,
+    button,
+    input,
+    select {
+        display: none !important;
+    }
+}

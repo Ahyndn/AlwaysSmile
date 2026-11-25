@@ -1,0 +1,1075 @@
+[
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 71,
+      "row": 65
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\analytics.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 65
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 65,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 51,
+      "row": 10
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 10
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 10,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 51,
+      "row": 15
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 15
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 15,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 51,
+      "row": 38
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 38
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 38,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 49,
+      "row": 70
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 70
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 70,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 49,
+      "row": 97
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 97
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 97,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 50,
+      "row": 113
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 113
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 113,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 57,
+      "row": 132
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 132
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 132,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 45,
+      "row": 245
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 245
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 245,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 57,
+      "row": 273
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 273
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 273,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 50,
+      "row": 302
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 302
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 302,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 53,
+      "row": 327
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\low_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 327
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 327,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 51,
+      "row": 10
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 10
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 10,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 51,
+      "row": 15
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 15
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 15,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 51,
+      "row": 36
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 36
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 36,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 49,
+      "row": 48
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 48
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 48,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 49,
+      "row": 74
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 74
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 74,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 50,
+      "row": 90
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 90
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 90,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 57,
+      "row": 109
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 109
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 109,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 45,
+      "row": 205
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 205
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 205,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 57,
+      "row": 228
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 228
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 228,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "TRY004",
+    "end_location": {
+      "column": 50,
+      "row": 257
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 257
+    },
+    "message": "Prefer `TypeError` exception for invalid type",
+    "name": "type-check-without-type-error",
+    "noqa_row": 257,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/type-check-without-type-error"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 53,
+      "row": 282
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\out_of_stock_orders.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 282
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "name": "raise-without-from-inside-except",
+    "noqa_row": 282,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 6,
+      "row": 15
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\review_visualizations.py",
+    "fix": null,
+    "location": {
+      "column": 21,
+      "row": 9
+    },
+    "message": "Mutable default value for class attribute",
+    "name": "mutable-class-default",
+    "noqa_row": 9,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "SIM102",
+    "end_location": {
+      "column": 67,
+      "row": 43
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\review_visualizations.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 42
+    },
+    "message": "Use a single `if` statement instead of nested `if` statements",
+    "name": "collapsible-if",
+    "noqa_row": 42,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/collapsible-if"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 23,
+      "row": 246
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\review_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 23,
+            "row": 246
+          },
+          "location": {
+            "column": 18,
+            "row": 246
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 18,
+      "row": 246
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 246,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 23,
+      "row": 262
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\review_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 23,
+            "row": 262
+          },
+          "location": {
+            "column": 18,
+            "row": 262
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 18,
+      "row": 262
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 262,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 6,
+      "row": 18
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\services.py",
+    "fix": null,
+    "location": {
+      "column": 15,
+      "row": 15
+    },
+    "message": "Mutable default value for class attribute",
+    "name": "mutable-class-default",
+    "noqa_row": 15,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 21,
+      "row": 29
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_chart_base.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_axis",
+          "end_location": {
+            "column": 21,
+            "row": 29
+          },
+          "location": {
+            "column": 17,
+            "row": 29
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 29
+    },
+    "message": "Unpacked variable `axis` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 29,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 77
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 77
+          },
+          "location": {
+            "column": 17,
+            "row": 77
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 77
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 77,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 93
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 93
+          },
+          "location": {
+            "column": 17,
+            "row": 93
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 93
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 93,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 104
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 104
+          },
+          "location": {
+            "column": 17,
+            "row": 104
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 104
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 104,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 132
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 132
+          },
+          "location": {
+            "column": 17,
+            "row": 132
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 132
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 132,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 143
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 143
+          },
+          "location": {
+            "column": 17,
+            "row": 143
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 143
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 143,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 170
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_inventory_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 170
+          },
+          "location": {
+            "column": 17,
+            "row": 170
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 170
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 170,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 23,
+      "row": 545
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_out_of_stock_orders.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 553
+          },
+          "location": {
+            "column": 1,
+            "row": 545
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `expected_order`"
+    },
+    "location": {
+      "column": 9,
+      "row": 545
+    },
+    "message": "Local variable `expected_order` is assigned to but never used",
+    "name": "unused-variable",
+    "noqa_row": 545,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 23,
+      "row": 8
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_review_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 23,
+            "row": 8
+          },
+          "location": {
+            "column": 18,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 18,
+      "row": 8
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 8,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 23,
+      "row": 24
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_review_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 23,
+            "row": 24
+          },
+          "location": {
+            "column": 18,
+            "row": 24
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 18,
+      "row": 24
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 24,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 76
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 76
+          },
+          "location": {
+            "column": 17,
+            "row": 76
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 76
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 76,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF059",
+    "end_location": {
+      "column": 22,
+      "row": 102
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\tests\\test_visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "_image",
+          "end_location": {
+            "column": 22,
+            "row": 102
+          },
+          "location": {
+            "column": 17,
+            "row": 102
+          }
+        }
+      ],
+      "message": "Prefix it with an underscore or any other dummy variable pattern"
+    },
+    "location": {
+      "column": 17,
+      "row": 102
+    },
+    "message": "Unpacked variable `image` is never used",
+    "name": "unused-unpacked-variable",
+    "noqa_row": 102,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-unpacked-variable"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 6,
+      "row": 20
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\visualizations.py",
+    "fix": null,
+    "location": {
+      "column": 14,
+      "row": 11
+    },
+    "message": "Mutable default value for class attribute",
+    "name": "mutable-class-default",
+    "noqa_row": 11,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "B905",
+    "end_location": {
+      "column": 59,
+      "row": 60
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ", strict=False",
+          "end_location": {
+            "column": 58,
+            "row": 60
+          },
+          "location": {
+            "column": 58,
+            "row": 60
+          }
+        }
+      ],
+      "message": "Add explicit value for parameter `strict=`"
+    },
+    "location": {
+      "column": 36,
+      "row": 60
+    },
+    "message": "`zip()` without an explicit `strict=` parameter",
+    "name": "zip-without-explicit-strict",
+    "noqa_row": 60,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/zip-without-explicit-strict"
+  },
+  {
+    "cell": null,
+    "code": "B905",
+    "end_location": {
+      "column": 52,
+      "row": 99
+    },
+    "filename": "C:\\Users\\Pen\\Documents\\AlwaysSmile\\apps\\dashboard\\visualizations.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": ", strict=False",
+          "end_location": {
+            "column": 51,
+            "row": 99
+          },
+          "location": {
+            "column": 51,
+            "row": 99
+          }
+        }
+      ],
+      "message": "Add explicit value for parameter `strict=`"
+    },
+    "location": {
+      "column": 35,
+      "row": 99
+    },
+    "message": "`zip()` without an explicit `strict=` parameter",
+    "name": "zip-without-explicit-strict",
+    "noqa_row": 99,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/zip-without-explicit-strict"
+  }
+]

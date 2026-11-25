@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}Customer Reviews | AlwaysSmile{% endblock %}
+{% block content %}
+  <div class="space-y-8">
+    {% if api_error %}
+      <div class="rounded-xl border border-red-200 bg-red-50 p-4">
+        <h3 class="font-semibold text-red-800">API connection error</h3>
+        <p class="mt-2 text-sm text-red-700">{{ api_error }}</p>
+      </div>
+    {% endif %}
+    <!-- Page Heading -->
+    <section>
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Customer Reviews</h2>
+      <p class="mt-1 text-sm text-gray-500">Monitor customer feedback, product ratings and review trends.</p>
+    </section>
+    <!-- Review Summary Cards -->
+    <section class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Total Reviews</p>
+        <p class="mt-3 text-3xl font-bold text-gray-900">{{ review_summary.total_reviews }}</p>
+        <p class="mt-2 text-xs text-gray-400">All customer feedback</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Positive Reviews</p>
+        <p class="mt-3 text-3xl font-bold text-green-600">{{ review_summary.positive_reviews }}</p>
+        <p class="mt-2 text-xs font-medium text-green-600">Rating: 4–5</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Neutral Reviews</p>
+        <p class="mt-3 text-3xl font-bold text-amber-600">{{ review_summary.neutral_reviews }}</p>
+        <p class="mt-2 text-xs font-medium text-amber-600">Rating: 3</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-gray-500">Negative Reviews</p>
+        <p class="mt-3 text-3xl font-bold text-red-600">{{ review_summary.negative_reviews }}</p>
+        <p class="mt-2 text-xs font-medium text-red-600">Rating: 1–2</p>
+      </div>
+    </section>
+    <!-- Review Visualizations -->
+    <section class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <!-- Product Rating Distribution -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h3 class="text-lg font-semibold text-gray-900">Product Rating Distribution</h3>
+        <p class="mt-1 text-sm text-gray-500">Percentage breakdown of customer ratings.</p>
+        {% if pie_chart_image %}
+          <div class="flex justify-center py-5">
+            <img src="{{ pie_chart_image }}"
+                 alt="Product rating distribution displayed as percentages"
+                 class="h-auto w-full max-w-xs object-contain">
+          </div>
+        {% else %}
+          <p class="py-12 text-center text-sm text-gray-500">No rating visualization available.</p>
+        {% endif %}
+        <div class="mt-4 border-t border-gray-100 pt-5">
+          <h4 class="mb-3 text-sm font-semibold text-gray-700">Rating Percentage Calculation</h4>
+          <p class="text-center text-sm font-medium leading-relaxed text-gray-700">
+            Rating Percentage =
+            <span class="font-mono">(Number of Reviews for a Rating ÷ Total Valid Reviews) × 100</span>
+          </p>
+          <p class="mt-3 text-xs leading-relaxed text-gray-500">
+            Each percentage represents the proportion of reviews
+            assigned to a particular rating, based on all valid
+            ratings received.
+          </p>
+        </div>
+      </div>
+      <!-- Reviews by Product Category -->
+      <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h3 class="text-lg font-semibold text-gray-900">Reviews by Product Category</h3>
+        <p class="mt-1 text-sm text-gray-500">Comparison of customer ratings across product categories.</p>
+        {% if category_chart_image %}
+          <div class="mt-5">
+            <img src="{{ category_chart_image }}"
+                 alt="Customer ratings grouped by product category"
+                 class="h-auto w-full">
+          </div>
+        {% else %}
+          <p class="py-12 text-center text-sm text-gray-500">No category visualization available.</p>
+        {% endif %}
+      </div>
+    </section>
+    <!-- Search and Filtering -->
+    <section class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-900">Search and Filter Reviews</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Find customer feedback using keywords, ratings,
+          product categories and review dates.
+        </p>
+      </div>
+      <form method="get" class="space-y-5">
+        <!-- Keyword Search -->
+        <div>
+          <label for="review-search"
+                 class="mb-2 block text-sm font-medium text-gray-700">Search Comments</label>
+          <input type="text"
+                 id="review-search"
+                 name="search"
+                 value="{{ search_query }}"
+                 placeholder="Search review comments..."
+                 class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+        </div>
+        <!-- Rating and Category -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label for="review-rating"
+                   class="mb-2 block text-sm font-medium text-gray-700">Product Rating</label>
+            <select id="review-rating"
+                    name="rating"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
+              <option value="">All Ratings</option>
+              {% for rating in "12345" %}
+                <option value="{{ rating }}"
+                        {% if selected_rating == rating %}selected{% endif %}>{{ rating }} / 5</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="review-category"
+                   class="mb-2 block text-sm font-medium text-gray-700">Product Category</label>
+            <select id="review-category"
+                    name="category"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
+              <option value="">All Categories</option>
+              {% for category in review_categories %}
+                <option value="{{ category }}"
+                        {% if selected_category == category %}selected{% endif %}>{{ category|title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <!-- Review Date Range -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label for="review-start-date"
+                   class="mb-2 block text-sm font-medium text-gray-700">Start Date</label>
+            <input type="date"
+                   id="review-start-date"
+                   name="start_date"
+                   value="{{ start_date }}"
+                   class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
+          </div>
+          <div>
+            <label for="review-end-date"
+                   class="mb-2 block text-sm font-medium text-gray-700">End Date</label>
+            <input type="date"
+                   id="review-end-date"
+                   name="end_date"
+                   value="{{ end_date }}"
+                   class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
+          </div>
+        </div>
+        <!-- Filter Actions -->
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="submit"
+                  class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+            Apply Filters
+          </button>
+          <a href="{% url 'dashboard:customer_review' %}"
+             class="rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+            Clear All
+          </a>
+        </div>
+      </form>
+    </section>
+    <!-- Customer Review Table -->
+    <section class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-200 px-6 py-5">
+        <h3 class="text-lg font-semibold text-gray-900">Customer Review Records</h3>
+        <p class="mt-1 text-sm text-gray-500">Showing {{ matching_review_count }} matching reviews.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rating</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Product</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Comment</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Reviewer</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            {% for review in latest_reviews %}
+              <tr class="transition hover:bg-gray-50">
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                  {{ review.date|default:"Unavailable" }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  <span class="inline-flex rounded-md bg-blue-50 px-2.5 py-1 text-sm font-semibold text-blue-700">
+                    {{ review.rating }} / 5
+                  </span>
+                </td>
+                <td class="min-w-40 px-6 py-4 text-sm font-medium text-gray-900">
+                  {{ review.product_title|default:"Unknown" }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">{{ review.category|title }}</td>
+                <td class="min-w-64 max-w-md px-6 py-4 text-sm leading-relaxed text-gray-600">
+                  {{ review.comment|default:"No comment" }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  <p class="text-sm font-medium text-gray-900">{{ review.reviewer_name|default:"Unknown" }}</p>
+                  <p class="mt-1 text-xs text-gray-500">{{ review.reviewer_email }}</p>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="px-6 py-12 text-center">
+                  <p class="text-sm font-medium text-gray-700">No customer reviews found.</p>
+                  <p class="mt-1 text-xs text-gray-500">Try changing your search criteria or clearing the filters.</p>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- Pagination -->
+    {% if page_obj and page_obj.paginator.num_pages > 1 %}
+      <section class="flex flex-wrap items-center justify-between gap-4">
+        <p class="text-sm text-gray-600">
+          Page {{ page_obj.number }}
+          of {{ page_obj.paginator.num_pages }}
+        </p>
+        <div class="flex items-center gap-2">
+          {% if page_obj.has_previous %}
+            <a href="?{{ pagination_query }}{% if pagination_query %}&{% endif %}page={{ page_obj.previous_page_number }}"
+               class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+              Previous
+            </a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?{{ pagination_query }}{% if pagination_query %}&{% endif %}page={{ page_obj.next_page_number }}"
+               class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+              Next
+            </a>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<c-vars variant="primary" type="button" disabled="false" />
+
+<button
+    type="{{ type }}"
+    {% if disabled == "true" or disabled == True %}disabled{% endif %}
+    class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 {{ class }} {% if variant == 'primary' %}bg-primary text-primary-foreground hover:opacity-90{% elif variant == 'secondary' %}bg-secondary text-secondary-foreground hover:opacity-80{% elif variant == 'outline' %}border border-input bg-background hover:bg-accent{% elif variant == 'ghost' %}hover:bg-accent{% elif variant == 'destructive' %}bg-destructive text-destructive-foreground{% endif %}"
+    {{ attrs }}
+>
+    {{ slot }}
+</button>

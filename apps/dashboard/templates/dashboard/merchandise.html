@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Merchandise | AlwaysSmile{% endblock %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/merchandise.css' %}">
+{% endblock %}
+{% block content %}
+  <div class="space-y-6">
+    <!-- PAGE HEADER -->
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <p class="text-sm text-gray-500">Building Management</p>
+        <h1 class="text-2xl font-bold text-gray-900">Merchandise Planogram</h1>
+        <p class="mt-1 text-sm text-gray-500">Manage building layouts, retail fixtures and merchandise displays.</p>
+      </div>
+      <div class="rounded-lg border border-gray-200 bg-white px-4 py-3">
+        <p class="text-xs text-gray-500">Available Products</p>
+        <p class="text-xl font-bold text-blue-700">{{ product_count }}</p>
+      </div>
+    </div>
+    {% if product_error %}
+      <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">{{ product_error }}</div>
+    {% endif %}
+    <!-- BUILDING INFORMATION -->
+    <section class="grid gap-4 sm:grid-cols-3">
+      <div class="rounded-xl border border-gray-200 bg-white p-5">
+        <p class="text-sm text-gray-500">Building</p>
+        <h2 class="mt-2 font-semibold">{{ building.name }}</h2>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5">
+        <p class="text-sm text-gray-500">Building Dimensions</p>
+        <h2 class="mt-2 font-semibold">{{ building.width }} m × {{ building.height }} m</h2>
+      </div>
+      <div class="rounded-xl border border-gray-200 bg-white p-5">
+        <p class="text-sm text-gray-500">Floors</p>
+        <h2 class="mt-2 font-semibold">{{ floors.count }} Floors</h2>
+      </div>
+    </section>
+    <!-- FLOOR CONTROLS -->
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="font-semibold text-gray-900">Building Floor Plan</h2>
+          <p class="mt-1 text-sm text-gray-500">Select a floor to inspect its layout and fixtures.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <select id="floorSelector"
+                  class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm">
+            {% for floor in floors %}
+              <option value="{{ floor.id }}">{{ floor.name }}</option>
+            {% endfor %}
+          </select>
+          <button id="exportFloor"
+                  class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
+            Export Drawing
+          </button>
+          <button id="clearFloor"
+                  class="rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100">
+            Clear Fixtures
+          </button>
+        </div>
+      </div>
+      <div class="mt-6 overflow-x-auto">
+        <div id="floorCanvas"
+             class="relative mx-auto border-2 border-gray-700 bg-white"
+             style="width: 100%;
+                    min-width: 650px;
+                    aspect-ratio: 4 / 3">
+          <div class="absolute inset-0 flex items-center justify-center text-gray-400">Loading floor plan...</div>
+        </div>
+      </div>
+      <!-- LEGEND -->
+      <div class="mt-5 flex flex-wrap gap-4 border-t border-gray-100 pt-4 text-xs text-gray-600">
+        <span><span class="legend-dot" style="background:#DBEAFE"></span> Sales</span>
+        <span><span class="legend-dot" style="background:#FDE68A"></span> Storage</span>
+        <span><span class="legend-dot" style="background:#FCE7F3"></span> Fitting</span>
+        <span><span class="legend-dot" style="background:#EDE9FE"></span> Management</span>
+        <span><span class="legend-dot" style="background:#D1FAE5"></span> Staff Mess</span>
+        <span><span class="legend-dot" style="background:#CCFBF1"></span> Staff Lounge</span>
+        <span><span class="legend-dot" style="background:#2563EB"></span> Fixture</span>
+      </div>
+    </section>
+    <!-- FIXTURE MANAGEMENT -->
+    <section class="grid gap-6 lg:grid-cols-3">
+      <div class="rounded-xl border border-gray-200 bg-white p-5 lg:col-span-1">
+        <h2 class="font-semibold">Add a Fixture</h2>
+        <p class="mt-1 text-sm text-gray-500">Add a display unit to the selected floor.</p>
+        <form id="fixtureForm" class="mt-4 space-y-3">
+          <input id="fixtureName"
+                 type="text"
+                 maxlength="100"
+                 placeholder="Fixture name"
+                 value="New Fixture"
+                 required
+                 class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+          <select id="fixtureType"
+                  class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+            <option value="shelf">Retail Shelf</option>
+            <option value="rack">Clothing Rack</option>
+            <option value="table">Display Table</option>
+            <option value="cabinet">Display Cabinet</option>
+            <option value="island">Promotional Island</option>
+          </select>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="text-sm">
+              X coordinate (m)
+              <input id="fixtureX"
+                     type="number"
+                     min="0"
+                     step="0.1"
+                     value="10"
+                     required
+                     class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+            </label>
+            <label class="text-sm">
+              Y coordinate (m)
+              <input id="fixtureY"
+                     type="number"
+                     min="0"
+                     step="0.1"
+                     value="10"
+                     required
+                     class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+            </label>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="text-sm">
+              Width (m)
+              <input id="fixtureWidth"
+                     type="number"
+                     min="0.1"
+                     step="0.1"
+                     value="1.2"
+                     class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+            </label>
+            <label class="text-sm">
+              Depth (m)
+              <input id="fixtureDepth"
+                     type="number"
+                     min="0.1"
+                     step="0.1"
+                     value="0.8"
+                     class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+            </label>
+          </div>
+          <button type="submit"
+                  class="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            Add Fixture
+          </button>
+        </form>
+        <div id="fixtureMessage" class="mt-3 text-sm" aria-live="polite"></div>
+      </div>
+      <!-- SELECTED FIXTURE -->
+      <div class="rounded-xl border border-gray-200 bg-white p-5 lg:col-span-2">
+        <h2 class="font-semibold">Selected Fixture</h2>
+        <div id="fixtureDetails" class="mt-4 text-sm text-gray-500">
+          Select a fixture on the floor plan to inspect its contents.
+        </div>
+      </div>
+    </section>
+    <!-- PLANOGRAM -->
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-semibold">Fixture Planogram</h2>
+          <p class="mt-1 text-sm text-gray-500">Products assigned to the selected fixture.</p>
+        </div>
+      </div>
+      <div id="planogramContainer" class="mt-5 overflow-x-auto">
+        <p class="text-sm text-gray-500">Select a fixture to view its planogram.</p>
+      </div>
+    </section>
+    <!-- PRODUCT CATALOGUE -->
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
+      <h2 class="font-semibold">Merchandise Catalogue</h2>
+      <p class="mt-1 text-sm text-gray-500">Search the DummyJSON product catalogue and assign products to fixtures.</p>
+      <input id="productSearch"
+             type="search"
+             placeholder="Search merchandise..."
+             class="mt-4 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
+      <div id="productResults"
+           class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <p class="text-sm text-gray-500">Loading products...</p>
+      </div>
+    </section>
+  </div>
+  <script>
+    window.MERCHANDISE_URLS = {
+        floor: "{% url 'dashboard:merchandise_floor_data' 999999 %}",
+        products: "{% url 'dashboard:merchandise_products' %}",
+        fixturePlanogram: "{% url 'dashboard:fixture_planogram_data' 999999 %}",
+        addFixture: "{% url 'dashboard:merchandise_add_fixture' 999999 %}",
+        deleteFixture: "{% url 'dashboard:merchandise_delete_fixture' 999999 %}",
+        clearFloor: "{% url 'dashboard:merchandise_clear_floor' 999999 %}",
+        addItem: "{% url 'dashboard:merchandise_add_planogram_item' 999999 %}",
+        deleteItem: "{% url 'dashboard:merchandise_delete_planogram_item' 999999 %}",
+        exportFloor: "{% url 'dashboard:merchandise_export_floor' 999999 %}"
+    };
+  </script>
+  {% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'js/merchandise.js' %}" defer></script>
+{% endblock extra_js %}

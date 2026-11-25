@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="min-h-screen bg-gray-50 px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+      <!-- PAGE HEADER -->
+      <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Saved Orders</h1>
+          <p class="mt-1 text-sm text-gray-500">Review and manage orders saved from all inventory categories.</p>
+        </div>
+        <a href="{{ return_url }}"
+           class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100">
+          Back to Inventory
+        </a>
+      </div>
+      <!-- DJANGO MESSAGES -->
+      {% if messages %}
+        <div class="mb-6 space-y-2">
+          {% for message in messages %}
+            <div class="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <!-- SUMMARY CARDS -->
+      <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm text-gray-500">Total Orders</p>
+          <p class="mt-2 text-2xl font-bold text-gray-900">{{ total_orders_count }}</p>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm text-gray-500">Total Quantity</p>
+          <p class="mt-2 text-2xl font-bold text-gray-900">{{ total_order_quantity }}</p>
+        </div>
+        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <p class="text-sm text-gray-500">Total Cart Value</p>
+          <p class="mt-2 text-2xl font-bold text-blue-700">${{ total_order_value|floatformat:2 }}</p>
+        </div>
+      </div>
+      <!-- FILTER TABS -->
+      <div class="mb-6 overflow-x-auto">
+        <div class="flex min-w-max gap-2">
+          <a href="?status=all&search={{ search_query|urlencode }}"
+             class="rounded-lg px-4 py-2 text-sm font-medium {% if current_status == 'all' %}bg-blue-600 text-white{% else %}border border-gray-200 bg-white text-gray-600 hover:bg-gray-100{% endif %}">
+            All Orders ({{ order_counts.all }})
+          </a>
+          <a href="?status=in_stock&search={{ search_query|urlencode }}"
+             class="rounded-lg px-4 py-2 text-sm font-medium {% if current_status == 'in_stock' %}bg-blue-600 text-white{% else %}border border-gray-200 bg-white text-gray-600 hover:bg-gray-100{% endif %}">
+            In Stock ({{ order_counts.in_stock }})
+          </a>
+          <a href="?status=low_stock&search={{ search_query|urlencode }}"
+             class="rounded-lg px-4 py-2 text-sm font-medium {% if current_status == 'low_stock' %}bg-blue-600 text-white{% else %}border border-gray-200 bg-white text-gray-600 hover:bg-gray-100{% endif %}">
+            Low Stock ({{ order_counts.low_stock }})
+          </a>
+          <a href="?status=out_of_stock&search={{ search_query|urlencode }}"
+             class="rounded-lg px-4 py-2 text-sm font-medium {% if current_status == 'out_of_stock' %}bg-blue-600 text-white{% else %}border border-gray-200 bg-white text-gray-600 hover:bg-gray-100{% endif %}">
+            Out of Stock ({{ order_counts.out_of_stock }})
+          </a>
+        </div>
+      </div>
+      <!-- SEARCH -->
+      <form method="get"
+            action="{% url 'dashboard:saved_orders' %}"
+            class="mb-6 flex flex-col gap-3 sm:flex-row">
+        <input type="hidden" name="status" value="{{ current_status }}">
+        <input type="search"
+               name="search"
+               value="{{ search_query }}"
+               placeholder="Search product name, SKU or product ID..."
+               class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+        <button type="submit"
+                class="rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700">
+          Search
+        </button>
+      </form>
+      <!-- ORDERS TABLE -->
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        {% if saved_orders %}
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                <tr>
+                  <th class="px-5 py-4">Product</th>
+                  <th class="px-5 py-4">Product ID</th>
+                  <th class="px-5 py-4">SKU</th>
+                  <th class="px-5 py-4">Category</th>
+                  <th class="px-5 py-4 text-right">Quantity</th>
+                  <th class="px-5 py-4 text-right">Unit Price</th>
+                  <th class="px-5 py-4 text-right">Line Total</th>
+                  <th class="px-5 py-4 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                {% for order in saved_orders %}
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-5 py-4 font-medium text-gray-900">{{ order.title }}</td>
+                    <td class="px-5 py-4 text-gray-600">{{ order.product_id }}</td>
+                    <td class="px-5 py-4 text-gray-600">{{ order.sku }}</td>
+                    <td class="px-5 py-4">
+                      {% if order.source == "in_stock" %}
+                        <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                          {{ order.status }}
+                        </span>
+                      {% elif order.source == "low_stock" %}
+                        <span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700">
+                          {{ order.status }}
+                        </span>
+                      {% else %}
+                        <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                          {{ order.status }}
+                        </span>
+                      {% endif %}
+                    </td>
+                    <td class="px-5 py-4 text-right">{{ order.quantity }}</td>
+                    <td class="px-5 py-4 text-right">${{ order.price|floatformat:2 }}</td>
+                    <td class="px-5 py-4 text-right font-semibold text-gray-900">
+                      ${{ order.line_total|floatformat:2 }}
+                    </td>
+                    <td class="px-5 py-4 text-center">
+                      <form method="post" action="{% url 'dashboard:saved_orders' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_order">
+                        <input type="hidden" name="product_id" value="{{ order.product_id }}">
+                        <input type="hidden" name="source" value="{{ order.source }}">
+                        <input type="hidden" name="next_url" value="{{ request.get_full_path }}">
+                        <button type="submit"
+                                class="rounded-lg px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50"
+                                onclick="return confirm('Remove this order?');">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="px-6 py-16 text-center">
+            <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="h-8 w-8 text-gray-400"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l2.4 12.2a2 2 0 002 1.6h8.8a2 2 0 002-1.6L22 7H6" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900">No Saved Orders</h3>
+            <p class="mt-2 text-sm text-gray-500">Your selected orders will appear here.</p>
+            <a href="{{ return_url }}"
+               class="mt-5 inline-block rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+              Return to Inventory
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      <!-- PAGINATION -->
+      {% if page_obj and page_obj.paginator.num_pages > 1 %}
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <p class="text-sm text-gray-500">
+            Showing {{ page_obj.start_index }}
+            to {{ page_obj.end_index }}
+            of {{ page_obj.paginator.count }} orders
+          </p>
+          <div class="flex items-center gap-2">
+            {% if page_obj.has_previous %}
+              <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                 class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm hover:bg-gray-100">Previous</a>
+            {% endif %}
+            <span class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white">{{ page_obj.number }}</span>
+            {% if page_obj.has_next %}
+              <a href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+                 class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm hover:bg-gray-100">Next</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+      <!-- CART ACTIONS -->
+      {% if total_orders_count > 0 %}
+        <div class="mt-8 flex flex-col justify-end gap-3 sm:flex-row">
+          <a href="{{ return_url }}"
+             class="rounded-lg border border-gray-300 bg-white px-6 py-3 text-center text-sm font-semibold text-gray-700 hover:bg-gray-100">
+            Cancel / Review
+          </a>
+          <form method="post" action="{% url 'dashboard:saved_orders' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="submit_orders">
+            <button type="submit"
+                    class="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+              Submit & Print
+            </button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  <div class="container mx-auto px-4 py-6">
+    <!-- Page Heading -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">ABC Inventory Analysis</h1>
+        <p class="text-gray-500 mt-1">Inventory classification based on estimated product sales value.</p>
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 px-5 py-3">
+        <p class="text-sm text-gray-500">Total Products Analyzed</p>
+        <p class="text-2xl font-bold text-gray-800">{{ total_products|default:0 }}</p>
+      </div>
+    </div>
+    <!-- Django Messages -->
+    {% if messages %}
+      <div class="mb-6 space-y-2">
+        {% for message in messages %}
+          <div class="p-4 rounded-lg border {% if message.tags == 'error' %} bg-red-50 text-red-700 border-red-200 {% elif message.tags == 'success' %} bg-green-50 text-green-700 border-green-200 {% else %} bg-blue-50 text-blue-700 border-blue-200 {% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- API Error -->
+    {% if api_error %}
+      <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <h3 class="font-semibold mb-1">Unable to retrieve inventory data</h3>
+        <p class="text-sm">{{ api_error }}</p>
+      </div>
+    {% endif %}
+    <!-- ABC Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+      <!-- Class A -->
+      <div class="bg-white rounded-xl shadow-sm border-l-4 border-green-500 p-5">
+        <p class="text-sm font-medium text-gray-500">Class A Products</p>
+        <div class="flex items-center justify-between mt-3">
+          <h2 class="text-3xl font-bold text-green-600">{{ class_a_count|default:0 }}</h2>
+          <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">A</span>
+        </div>
+        <p class="text-sm text-gray-500 mt-2">High-value products</p>
+        <p class="text-xs text-gray-400 mt-1">Approximately first 80% of cumulative sales value</p>
+      </div>
+      <!-- Class B -->
+      <div class="bg-white rounded-xl shadow-sm border-l-4 border-yellow-500 p-5">
+        <p class="text-sm font-medium text-gray-500">Class B Products</p>
+        <div class="flex items-center justify-between mt-3">
+          <h2 class="text-3xl font-bold text-yellow-600">{{ class_b_count|default:0 }}</h2>
+          <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-semibold">B</span>
+        </div>
+        <p class="text-sm text-gray-500 mt-2">Medium-value products</p>
+        <p class="text-xs text-gray-400 mt-1">Approximately 80% to 95% cumulative sales value</p>
+      </div>
+      <!-- Class C -->
+      <div class="bg-white rounded-xl shadow-sm border-l-4 border-red-500 p-5">
+        <p class="text-sm font-medium text-gray-500">Class C Products</p>
+        <div class="flex items-center justify-between mt-3">
+          <h2 class="text-3xl font-bold text-red-600">{{ class_c_count|default:0 }}</h2>
+          <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-semibold">C</span>
+        </div>
+        <p class="text-sm text-gray-500 mt-2">Low-value products</p>
+        <p class="text-xs text-gray-400 mt-1">Remaining cumulative sales value</p>
+      </div>
+    </div>
+    <!-- ABC Chart -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-8">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-gray-800">ABC Pareto Analysis</h2>
+        <p class="text-sm text-gray-500 mt-1">
+          Products ranked by estimated sales value, with cumulative sales
+          contribution.
+        </p>
+      </div>
+      <div id="abc-chart" class="w-full min-h-[420px]"></div>
+    </div>
+    <!-- Classification Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-8">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-gray-800">Product Classification</h2>
+          <p class="text-sm text-gray-500 mt-1">Detailed ABC classification results.</p>
+        </div>
+        <input type="text"
+               id="abcSearch"
+               placeholder="Search products..."
+               aria-label="Search classified products"
+               class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200" id="abcTable">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Rank</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Price</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Stock</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Estimated Sales Value</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Cumulative %</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase">Class</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100">
+            {% for product in abc_products %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-600">{{ product.product_rank }}</td>
+                <td class="px-4 py-3 text-sm font-medium text-gray-800">{{ product.title }}</td>
+                <td class="px-4 py-3 text-sm text-right text-gray-600">{{ product.price|floatformat:2 }}</td>
+                <td class="px-4 py-3 text-sm text-right text-gray-600">{{ product.stock }}</td>
+                <td class="px-4 py-3 text-sm text-right font-medium text-gray-800">
+                  {{ product.sales_value|floatformat:2 }}
+                </td>
+                <td class="px-4 py-3 text-sm text-right text-gray-600">
+                  {{ product.cumulative_percentage|floatformat:2 }}%
+                </td>
+                <td class="px-4 py-3 text-center">
+                  {% if product.abc_class == "A" %}
+                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">A</span>
+                  {% elif product.abc_class == "B" %}
+                    <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold">B</span>
+                  {% else %}
+                    <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold">C</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="7" class="px-4 py-10 text-center text-gray-400">No ABC classification data available.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Calculation Definitions -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-8">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">Calculation Definitions</h2>
+      <div class="space-y-4 text-sm text-gray-600">
+        <div>
+          <h3 class="font-semibold text-gray-800">1. Estimated Units Sold</h3>
+          <p class="mt-1">Estimated Units Sold = max(0, MOQ - Stock)</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-800">2. Estimated Sales Value</h3>
+          <p class="mt-1">Estimated Sales Value = Estimated Units Sold × Product Price</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-800">3. Cumulative Percentage</h3>
+          <p class="mt-1">
+            Cumulative Percentage = (Cumulative Sales Value / Total Sales Value) ×
+            100
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-800">4. ABC Classification</h3>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>Class A: cumulative percentage up to 80%.</li>
+            <li>Class B: cumulative percentage above 80% and up to 95%.</li>
+            <li>Class C: cumulative percentage above 95%.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-5 p-4 rounded-lg bg-blue-50 border border-blue-100">
+        <p class="text-sm text-blue-800">
+          <strong>Important:</strong>
+          These figures are estimated using the existing inventory calculation
+          methodology. They do not represent actual historical sales transactions.
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- Plotly Library -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <!-- Safely transfer Django chart data -->
+  {{ chart_data|json_script:"abc-chart-data" }}
+  <!-- ABC JavaScript -->
+  <script>
+  document;
+  document.addEventListener("DOMContentLoaded", function () {
+    // ---------------------------------
+    // ABC Search
+    // ---------------------------------
+
+    const searchInput = document.getElementById("abcSearch");
+
+    if (searchInput) {
+      searchInput.addEventListener("input", function () {
+        const searchValue = this.value.toLowerCase();
+
+        const rows = document.querySelectorAll("#abcTable tbody tr");
+
+        rows.forEach(function (row) {
+          const rowText = row.textContent.toLowerCase();
+
+          row.style.display = rowText.includes(searchValue) ? "" : "none";
+        });
+      });
+    }
+
+    // ---------------------------------
+    // ABC Plotly Chart
+    // ---------------------------------
+
+    const chartElement = document.getElementById("abc-chart");
+
+    const chartDataElement = document.getElementById("abc-chart-data");
+
+    if (!chartElement || !chartDataElement) {
+      console.error("ABC chart elements were not found.");
+      return;
+    }
+
+    if (typeof Plotly === "undefined") {
+      console.error("Plotly library was not loaded.");
+
+      chartElement.innerHTML =
+        '<p class="text-center text-red-500 py-20">' +
+        "Plotly library could not be loaded." +
+        "</p>";
+
+      return;
+    }
+
+    try {
+      const figure = JSON.parse(chartDataElement.textContent);
+
+      Plotly.newPlot(chartElement, figure.data || [], figure.layout || {}, {
+        responsive: true,
+        displaylogo: false,
+      });
+    } catch (error) {
+      console.error("Unable to render ABC chart:", error);
+
+      chartElement.innerHTML =
+        '<p class="text-center text-red-500 py-20">' +
+        "Unable to display ABC analysis chart." +
+        "</p>";
+    }
+  });
+  </script>
+{% endblock %}
