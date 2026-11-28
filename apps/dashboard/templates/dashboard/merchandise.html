@@ -183,16 +183,113 @@
     </section>
     <!-- PRODUCT CATALOGUE -->
     <section class="rounded-xl border border-gray-200 bg-white p-5">
-      <h2 class="font-semibold">Merchandise Catalogue</h2>
-      <p class="mt-1 text-sm text-gray-500">Search the DummyJSON product catalogue and assign products to fixtures.</p>
-      <input id="productSearch"
-             type="search"
-             placeholder="Search merchandise..."
-             class="mt-4 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm">
-      <div id="productResults"
-           class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <p class="text-sm text-gray-500">Loading products...</p>
-      </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900">
+                    Merchandise Catalogue
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    Search products and assign merchandise to fixtures.
+                </p>
+            </div>
+
+            <span class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+                {{ product_count }} Products
+            </span>
+        </div>
+
+        <input
+            id="productSearch"
+            type="search"
+            placeholder="Search merchandise..."
+            class="mt-5 w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+        >
+
+        <!-- CATEGORY TABS -->
+        <div
+            id="productCategories"
+            class="mt-4 flex flex-wrap gap-2"
+            role="group"
+            aria-label="Product categories">
+        </div>
+
+        <!-- PRODUCT CARDS -->
+        <div
+            id="productResults"
+            class="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <p class="text-sm text-gray-500">
+                Loading products...
+            </p>
+        </div>
+
+    </section>
+
+        <!-- SEARCH -->
+        <div class="relative mt-5">
+            <svg class="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+
+            <input
+                id="productSearch"
+                type="search"
+                placeholder="Search products by name, brand or category..."
+                class="w-full rounded-lg border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            >
+            <!-- PRODUCT CATEGORY TABS -->
+            <div id="productCategories"
+                class="mt-4 flex flex-wrap gap-2">
+            </div>
+        </div>
+
+        <!-- DYNAMIC CATEGORY TABS -->
+        <div class="mt-6 border-b border-gray-200">
+            <div id="productCategoryTabs"
+                class="flex gap-6 overflow-x-auto"
+                role="tablist"
+                aria-label="Product categories">
+
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  data-card-tab="price"
+                  class="border-b-2 border-blue-600 pb-2 text-sm font-semibold text-blue-600">
+                  Price Planner
+                </button>
+
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-card-tab="planogram"
+                  class="border-b-2 border-transparent pb-2 text-sm font-medium text-gray-500">
+                  Planogram
+              </button>
+
+            </div>
+        </div>
+
+        <!-- PRODUCT CARDS -->
+        <div id="productResults"
+            class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+            <div class="col-span-full py-12 text-center">
+                <div class="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-blue-100 border-t-blue-600"></div>
+                <p class="mt-3 text-sm text-gray-500">
+                    Loading merchandise...
+                </p>
+            </div>
+
+        </div>
+
     </section>
   </div>
   <script>
@@ -211,5 +308,5 @@
   {% endblock content %}
 
 {% block extra_js %}
-    <script src="{% static 'js/merchandise.js' %}" defer></script>
+    <script src="{% static 'js/merchandise.js' %}?v=9"></script>
 {% endblock extra_js %}

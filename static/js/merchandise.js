@@ -1,5 +1,4 @@
 /* ============================================================ ALWAYSSMILE — MERCHANDISE PLANOGRAM ============================================================ */
-
 (() => { "use strict";
 
 const urls = window.MERCHANDISE_URLS;
@@ -28,7 +27,8 @@ const elements = {
     planogramContainer: document.getElementById("planogramContainer"),
 
     productSearch: document.getElementById("productSearch"),
-    productResults: document.getElementById("productResults")
+    productResults: document.getElementById("productResults"),
+    productCategories: document.getElementById("productCategories")
 };
 
 let currentFloor = null;
@@ -113,6 +113,34 @@ function setLoading(element, message) {
             ${escapeHTML(message)}
         </p>
     `;
+}
+
+function updateProductFixtureCards() {
+    document.querySelectorAll(".product-card").forEach(card => {
+        const name = card.querySelector("[data-fixture-name]");
+        const status = card.querySelector("[data-fixture-status]");
+        const button = card.querySelector("[data-add-product]");
+
+        if (name) {
+            name.textContent = selectedFixture
+                ? selectedFixture.name
+                : "No fixture selected";
+        }
+
+        if (status) {
+            status.textContent = selectedFixture
+                ? "Fixture selected"
+                : "Awaiting selection";
+
+            status.className = selectedFixture
+                ? "mt-2 inline-flex rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
+                : "mt-2 inline-flex rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700";
+        }
+
+        if (button) {
+            button.disabled = !selectedFixture;
+        }
+    });
 }
 
 /* ========================================================
@@ -290,6 +318,7 @@ function renderFixture(fixture, floorWidth, floorHeight) {
 
 async function selectFixture(fixture) {
     selectedFixture = fixture;
+    updateProductFixtureCards();
 
     if (currentFloorData) {
         renderFloor(
@@ -330,7 +359,6 @@ async function selectFixture(fixture) {
 /* ========================================================
    ADD FIXTURE
    ======================================================== */
-
 async function addFixture(event) {
     event.preventDefault();
 
@@ -392,113 +420,7 @@ async function addFixture(event) {
     }
 }
 
-/* ========================================================
-   DELETE FIXTURE
-   ======================================================== */
 
-async function deleteSelectedFixture() {
-    if (!selectedFixture) return;
-
-    if (!confirm("Delete this fixture and its planogram?")) {
-        return;
-    }
-
-    try {
-        await apiRequest(
-            endpoint(urls.deleteFixture, selectedFixture.id),
-            {
-                method: "POST"
-            }
-        );
-
-        selectedFixture = null;
-
-        await loadFloor();
-
-        showMessage("Fixture deleted successfully.");
-
-    } catch (error) {
-        showMessage(error.message, false);
-    }
-}
-
-/* ========================================================
-   PRODUCT CATALOGUE
-   ======================================================== */
-
-async function loadProducts(search = "") {
-    setLoading(elements.productResults, "Loading products...");
-
-    try {
-        const url = new URL(
-            urls.products,
-            window.location.origin
-        );
-
-        url.searchParams.set("search", search);
-
-        const data = await apiRequest(url.toString());
-
-        products = data.products || [];
-
-        renderProducts(products);
-
-    } catch (error) {
-        setLoading(elements.productResults, error.message);
-        console.error("Product loading error:", error);
-    }
-}
-
-function renderProducts(items) {
-    if (!items.length) {
-        setLoading(elements.productResults, "No products found.");
-        return;
-    }
-
-    elements.productResults.innerHTML = items.map(product => `
-        <article class="rounded-xl border border-gray-200 bg-white p-4">
-
-            <img
-                src="${escapeHTML(product.thumbnail || "")}"
-                alt="${escapeHTML(product.title)}"
-                class="mb-3 h-36 w-full rounded-lg object-contain"
-                loading="lazy"
-            >
-
-            <h3 class="font-semibold text-gray-900">
-                ${escapeHTML(product.title)}
-            </h3>
-
-            <p class="mt-1 text-sm text-gray-500">
-                ${escapeHTML(product.category)}
-            </p>
-
-            <p class="mt-2 font-semibold text-blue-700">
-                $${escapeHTML(product.price)}
-            </p>
-
-            <p class="text-xs text-gray-500">
-                Stock: ${escapeHTML(product.stock)}
-            </p>
-
-            <button
-                type="button"
-                data-product-id="${escapeHTML(product.id)}"
-                class="mt-3 w-full rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-                Add to Selected Fixture
-            </button>
-
-        </article>
-    `).join("");
-
-    elements.productResults
-        .querySelectorAll("[data-product-id]")
-        .forEach(button => {
-            button.addEventListener("click", () => {
-                addProductToFixture(button.dataset.productId);
-            });
-        });
-}
 
 /* ========================================================
    ADD PRODUCT TO PLANOGRAM
@@ -523,11 +445,7 @@ async function addProductToFixture(productId) {
         prompt("Enter number of facings:", "1")
     );
 
-    if (
-        !Number.isInteger(facings) ||
-        facings < 1 ||
-        facings > quantity
-    ) {
+    if (!Number.isInteger(facings) || facings < 1 || facings > quantity) {
         alert("Facings must be between 1 and the product quantity.");
         return;
     }
@@ -556,6 +474,454 @@ async function addProductToFixture(productId) {
         alert(error.message);
     }
 }
+
+
+/* ========================================================
+   DELETE FIXTURE
+   ======================================================== */
+
+async function deleteSelectedFixture() {
+    if (!selectedFixture) return;
+
+    if (!confirm("Delete this fixture and its planogram?")) {
+        return;
+    }
+
+    try {
+        await apiRequest(
+            endpoint(urls.deleteFixture, selectedFixture.id),
+            {
+                method: "POST"
+            }
+        );
+
+        updateProductFixtureCards();
+
+        await loadFloor();
+
+        showMessage("Fixture deleted successfully.");
+
+    } catch (error) {
+        showMessage(error.message, false);
+    }
+}
+
+/* ========================================================
+   PRODUCT CATALOGUE
+   ======================================================== */
+
+
+async function loadProducts(search = "") {
+    if (!elements.productResults) {
+        console.error("Product results container is missing.");
+        return;
+    }
+
+    setLoading(elements.productResults, "Loading products...");
+
+    try {
+        const url = new URL(
+            urls.products,
+            window.location.origin
+        );
+
+        url.searchParams.set("search", search);
+
+        const data = await apiRequest(url.toString());
+
+        products = Array.isArray(data.products)
+            ? data.products
+            : [];
+
+        // Render category tabs using the complete product list.
+        loadProductCategories();
+
+        // Apply the selected category.
+        const filteredProducts = activeCategory === "all"
+            ? products
+            : products.filter(product =>
+                product.category === activeCategory
+            );
+
+        // Render the filtered product cards.
+        renderProducts(filteredProducts);
+
+        console.log("Products loaded:", products.length);
+        console.log(
+            "Product cards displayed:",
+            elements.productResults.querySelectorAll(".product-card").length
+        );
+
+    } catch (error) {
+        console.error("PRODUCT LOADING FAILED:", error);
+        setLoading(elements.productResults, error.message);
+    }
+}
+
+/* ========================================================
+   PRODUCT CATEGORIES
+   ======================================================== */
+
+let activeCategory = "all";
+let activeCardTabs = {};
+
+/* ========================================================
+   RENDER CATEGORY TABS
+   ======================================================== */
+
+function loadProductCategories() {
+    const categories = [
+        ...new Set(
+            products
+                .map(product => product.category)
+                .filter(Boolean)
+        )
+    ];
+
+    const categoryContainer = document.getElementById(
+        "productCategories"
+    );
+
+    if (!categoryContainer) return;
+
+    const allCategories = ["all", ...categories];
+
+    categoryContainer.innerHTML = allCategories.map(category => `
+        <button
+            type="button"
+            data-category="${escapeHTML(category)}"
+            class="rounded-lg px-4 py-2 text-sm font-medium transition ${
+                activeCategory === category
+                    ? "bg-blue-600 text-white"
+                    : "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+            }">
+            ${category === "all"
+                ? "All Products"
+                : escapeHTML(
+                    category.replace(/-/g, " ").replace(/\b\w/g, letter => letter.toUpperCase())
+                )
+            }
+        </button>
+    `).join("");
+
+    categoryContainer.querySelectorAll("[data-category]")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                activeCategory = button.dataset.category;
+
+                loadProductCategories();
+                const filteredProducts = activeCategory === "all"
+                    ? products
+                    : products.filter(product =>
+                        product.category === activeCategory
+                    );
+
+                renderProducts(filteredProducts);
+            });
+        });
+}
+
+/* ========================================================
+   RENDER INDIVIDUAL PRODUCT CARD
+   ======================================================== */
+
+function renderProductCard(product) {
+    const id = escapeHTML(product.id);
+    const fixtureName = escapeHTML(
+        selectedFixture?.name || "No fixture selected"
+    );
+
+    const fixtureStatus = selectedFixture
+        ? "bg-green-50 text-green-700"
+        : "bg-amber-50 text-amber-700";
+
+    const activeTab = activeCardTabs[product.id] || "price";
+
+    return `
+        <article
+            class="product-card overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+            data-product-id="${id}">
+
+            <!-- PRODUCT INFORMATION -->
+
+            <div class="p-4">
+
+                <img
+                  src="${escapeHTML(product.thumbnail || "")}"
+                  alt="${escapeHTML(product.title)}"
+                  width="300"
+                  height="160"
+                  class="mb-4 h-40 w-full rounded-lg bg-gray-50 object-contain"
+                  loading="lazy">
+
+                <div class="flex items-start justify-between gap-2">
+
+                    <div class="min-w-0">
+                        <h3 class="truncate font-semibold text-gray-900">
+                            ${escapeHTML(product.title)}
+                        </h3>
+
+                        <p class="mt-1 text-xs text-gray-500">
+                            ${escapeHTML(product.category)}
+                        </p>
+                    </div>
+
+                    <span class="shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                        #${id}
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- TWO CARD TABS -->
+
+            <div class="grid grid-cols-2 border-y border-gray-200">
+
+                <button
+                    type="button"
+                    data-card-tab="price"
+                    data-product="${id}"
+                    class="px-2 py-3 text-sm font-semibold ${
+                        activeTab === "price"
+                            ? "border-b-2 border-blue-600 bg-blue-50 text-blue-700"
+                            : "text-gray-500 hover:bg-gray-50"
+                    }">
+                    Price Planner
+                </button>
+
+                <button
+                    type="button"
+                    data-card-tab="planogram"
+                    data-product="${id}"
+                    class="px-2 py-3 text-sm font-semibold ${
+                        activeTab === "planogram"
+                            ? "border-b-2 border-blue-600 bg-blue-50 text-blue-700"
+                            : "text-gray-500 hover:bg-gray-50"
+                    }">
+                    Planogram
+                </button>
+
+            </div>
+
+            <!-- PRICE PLANNER TAB -->
+
+
+            <div class="grid grid-cols-2 gap-3">
+
+                <div>
+                    <p class="text-xs text-gray-500">Selling Price</p>
+                    <p class="mt-1 text-xl font-bold text-blue-700">
+                        $${escapeHTML(product.price)}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500">Available Stock</p>
+                    <p class="mt-1 text-xl font-bold text-gray-900">
+                        ${escapeHTML(product.stock)}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500">Discount</p>
+                    <p class="mt-1 text-xl font-bold text-green-700">
+                        ${Number(product.discountPercentage ?? 0).toFixed(2)}%
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500">Customer Rating</p>
+                    <p class="mt-1 text-xl font-bold text-amber-600">
+                        ${Number(product.rating ?? 0).toFixed(2)} / 5
+                    </p>
+                </div>
+
+            </div>
+
+
+                <p class="text-xs text-gray-500">
+                    Price information from the product catalogue.
+                </p>
+
+            </div>
+
+            <!-- PLANOGRAM TAB -->
+
+            <div
+                data-card-panel="planogram"
+                class="${activeTab === "planogram" ? "" : "hidden"} space-y-3 p-4">
+
+                <div>
+
+                    <p class="text-xs font-medium text-gray-500">
+                        Selected Fixture
+                    </p>
+
+                    <p data-fixture-name
+                       class="mt-1 truncate text-sm font-semibold text-gray-900">
+                        ${fixtureName}
+                    </p>
+
+                    <span data-fixture-status
+                          class="mt-2 inline-flex rounded-full px-2 py-1 text-xs font-medium ${fixtureStatus}">
+                        ${selectedFixture
+                            ? "Fixture selected"
+                            : "Awaiting selection"}
+                    </span>
+
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+
+                    <label class="text-xs font-medium text-gray-600">
+                        Quantity
+
+                        <input
+                            type="number"
+                            min="1"
+                            max="10000"
+                            value="1"
+                            data-placement-quantity
+                            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                    </label>
+
+                    <label class="text-xs font-medium text-gray-600">
+                        Facings
+
+                        <input
+                            type="number"
+                            min="1"
+                            value="1"
+                            data-placement-facings
+                            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm">
+                    </label>
+
+                </div>
+
+                <button
+                    type="button"
+                    data-add-product="${id}"
+                    ${selectedFixture ? "" : "disabled"}
+                    class="w-full rounded-lg bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300">
+                    Add to Selected Fixture
+                </button>
+
+            </div>
+
+        </article>
+    `;
+}
+
+
+function initializeProductCardTabs() {
+
+    elements.productResults
+        .querySelectorAll(".product-card")
+        .forEach(card => {
+
+            const tabs = card.querySelectorAll("[data-card-tab]");
+            const panels = card.querySelectorAll("[data-card-panel]");
+
+            tabs.forEach(tab => {
+
+                tab.addEventListener("click", () => {
+
+                    const selectedTab = tab.dataset.cardTab;
+
+                    // Update tab appearance
+                    tabs.forEach(button => {
+
+                        const active =
+                            button.dataset.cardTab === selectedTab;
+
+                        button.classList.toggle(
+                            "border-blue-600",
+                            active
+                        );
+
+                        button.classList.toggle(
+                            "text-blue-600",
+                            active
+                        );
+
+                        button.classList.toggle(
+                            "border-transparent",
+                            !active
+                        );
+
+                        button.classList.toggle(
+                            "text-gray-500",
+                            !active
+                        );
+
+                        button.classList.toggle(
+                            "font-semibold",
+                            active
+                        );
+
+                        button.classList.toggle(
+                            "font-medium",
+                            !active
+                        );
+
+                        button.setAttribute(
+                            "aria-selected",
+                            String(active)
+                        );
+                    });
+
+                    // Display the selected panel
+                    panels.forEach(panel => {
+
+                        const active =
+                            panel.dataset.cardPanel === selectedTab;
+
+                        panel.classList.toggle("hidden", !active);
+
+                    });
+
+                });
+
+            });
+
+        });
+
+}
+
+/* ========================================================
+   RENDER PRODUCT COLLECTION
+   ======================================================== */
+
+function renderProducts(items) {
+    if (!elements.productResults) {
+        console.error("Product results container is missing.");
+        return;
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+        elements.productResults.innerHTML = `
+            <p class="col-span-full rounded-lg border border-gray-200
+                      bg-white p-6 text-center text-sm text-gray-500">
+                No products found.
+            </p>
+        `;
+        return;
+    }
+
+    elements.productResults.innerHTML = items
+        .map(product => renderProductCard(product))
+        .join("");
+
+    elements.productResults
+        .querySelectorAll("[data-product-id]")
+        .forEach(button => {
+            button.addEventListener("click", () => {
+                addProductToFixture(button.dataset.productId);
+            });
+        });
+}
+
 
 /* ========================================================
    LOAD PLANOGRAM
@@ -693,7 +1059,7 @@ async function clearFloor() {
             }
         );
 
-        selectedFixture = null;
+        updateProductFixtureCards();
 
         await loadFloor();
 
@@ -794,7 +1160,7 @@ async function initialize() {
         await loadFloor();
     }
 
-    await loadProducts();
+     await loadProducts();
 }
 
 initialize();
